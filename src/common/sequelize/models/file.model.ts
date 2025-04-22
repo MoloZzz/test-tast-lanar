@@ -3,28 +3,28 @@ import { ImageModel } from './image.model';
 
 @Table({ tableName: 'files' })
 export class FileModel extends Model<FileModel> {
-  @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
-    primaryKey: true,
-  })
-  id: string;
+    @Column({
+        type: DataType.UUID,
+        defaultValue: DataType.UUIDV4,
+        primaryKey: true,
+    })
+    id: string;
 
-  @Column({ allowNull: false })
-  filename: string;
+    @Column({ allowNull: false })
+    filename: string;
 
-  @Column
-  mimetype: string;
+    @Column
+    mimetype: string;
 
-  @Column
-  encoding: string;
+    @Column
+    encoding: string;
 
-  @Column
-  path: string;
+    @Column
+    path: string;
 
-  @Column({ type: DataType.INTEGER })
-  size: number;
+    @Column({ type: DataType.INTEGER })
+    size: number;
 
-  @HasOne(() => ImageModel)
-  image: ImageModel;
+    @HasOne(() => ImageModel)
+    image: ImageModel;
 }

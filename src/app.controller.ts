@@ -2,10 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor() {}
+    constructor() {}
 
-  @Get()
-  async ping(): Promise<string> {
-    return 'pong';
-  }
+    @Get()
+    async ping(): Promise<string> {
+        return 'pong';
+    }
 }

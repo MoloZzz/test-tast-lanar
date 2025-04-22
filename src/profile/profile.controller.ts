@@ -5,5 +5,5 @@ import { ProfileService } from './profile.service';
 @ApiTags('Profile CRUD API')
 @Controller('profile')
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) {}
+    constructor(private readonly profileService: ProfileService) {}
 }

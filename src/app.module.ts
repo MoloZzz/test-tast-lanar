@@ -8,30 +8,32 @@ import { AuthModule } from './auth/auth.module';
 import * as Joi from 'joi';
 import { PostgresqlModule } from './common/postgresql/postrgesql.module';
 import { models } from './common/sequelize/models/models';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
-  imports: [
-    FileModule,
-    ProfileModule,
-    PortfolioModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: [`.env`],
-      validationSchema: Joi.object({
-        API_DOCS_ENABLED: Joi.string().optional(),
-        PORT: Joi.number().required(),
-        POSTGRES_USER: Joi.string().required(),
-        POSTGRES_DB_NAME: Joi.string().required(),
-        POSTGRES_IS_LOGGING_ENABLED: Joi.string().required(),
-        POSTGRES_HOST: Joi.string().required(),
-        POSTGRES_PORT: Joi.string().required(),
-        POSTGRES_PASS: Joi.string().required(),
-      }),
-    }),
-    AuthModule,
-    PostgresqlModule.register(models),
-  ],
-  controllers: [AppController],
-  providers: [],
+    imports: [
+        FileModule,
+        ProfileModule,
+        PortfolioModule,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: [`.env`],
+            validationSchema: Joi.object({
+                API_DOCS_ENABLED: Joi.string().optional(),
+                PORT: Joi.number().required(),
+                POSTGRES_USER: Joi.string().required(),
+                POSTGRES_DB_NAME: Joi.string().required(),
+                POSTGRES_IS_LOGGING_ENABLED: Joi.string().required(),
+                POSTGRES_HOST: Joi.string().required(),
+                POSTGRES_PORT: Joi.string().required(),
+                POSTGRES_PASS: Joi.string().required(),
+            }),
+        }),
+        AuthModule,
+        PostgresqlModule.register(models),
+        CommentModule,
+    ],
+    controllers: [AppController],
+    providers: [],
 })
 export class AppModule {}

@@ -5,5 +5,5 @@ import { PortfolioService } from './portfolio.service';
 @ApiTags('Portfolio API')
 @Controller('portfolio')
 export class PortfolioController {
-  constructor(private readonly portfolioService: PortfolioService) {}
+    constructor(private readonly portfolioService: PortfolioService) {}
 }

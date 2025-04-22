@@ -4,10 +4,4 @@ import { ImageModel } from './image.model';
 import { PortfolioModel } from './portfolio.model';
 import { ProfileModel } from './profile.model';
 
-export const models = [
-  CommentModel,
-  FileModel,
-  ImageModel,
-  PortfolioModel,
-  ProfileModel,
-];
+export const models = [CommentModel, FileModel, ImageModel, PortfolioModel, ProfileModel];

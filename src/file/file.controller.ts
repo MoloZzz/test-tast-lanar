@@ -5,5 +5,5 @@ import { FileService } from './file.service';
 @ApiTags('File API')
 @Controller('file')
 export class FileController {
-  constructor(private readonly fileService: FileService) {}
+    constructor(private readonly fileService: FileService) {}
 }
