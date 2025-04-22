@@ -4,6 +4,7 @@ import { FileModule } from './file/file.module';
 import { ProfileModule } from './profile/profile.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -19,6 +20,7 @@ import * as Joi from 'joi';
         PORT: Joi.number().required(),
       }),
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],
