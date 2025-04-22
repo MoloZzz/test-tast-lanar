@@ -14,28 +14,22 @@ export class AuthController {
     @ApiOperation({ summary: 'Register a new Profile' })
     @ApiBody({ type: SignupDto })
     async signup(@Body() signupDto: SignupDto): Promise<ProfileDto> {
-        // TODO: Implement logic in AuthService
-        // return this.authService.signup(signupDto);
-        console.log('Signup DTO:', signupDto);
-        return {} as ProfileDto; // Placeholder
+        return this.authService.signup(signupDto);
+        
     }
 
     @Post('login')
     @ApiOperation({ summary: 'Log in an existing Profile' })
     @ApiBody({ type: LoginDto })
     async login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
-        // TODO: Implement logic in AuthService
-        // return this.authService.login(loginDto);
-        console.log('Login DTO:', loginDto);
-        return { accessToken: 'dummy-token' }; // Placeholder
+        return this.authService.login(loginDto);
+
     }
 
     @Post('logout')
     @ApiOperation({ summary: 'Log out the current Profile (optional)' })
     async logout(@Req() req: Request): Promise<{ message: string }> {
-        // const profile = req.profile as IProfile;
-        // TODO: Implement logic in AuthService
-        // await this.authService.logout(Profile);
-        return { message: 'Successfully logged out.' }; // Placeholder
+        const profile = {}; //req.profile as IProfile;
+        return this.authService.logout(profile);
     }
 }
