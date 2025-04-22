@@ -32,7 +32,7 @@ contains this image) ordered by creation time
 - ORM: Sequelize 
 
 # Additional tech
-- ValidationPipe
+- Class-transformer
 - Class-validator
 
 ## Running the app
