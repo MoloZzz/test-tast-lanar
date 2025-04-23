@@ -1,10 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsDefined, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateImageDto {
-    @ApiProperty() file: any;
-    @ApiProperty({ required: false }) name?: string;
-    @ApiProperty({ required: false }) description?: string;
-    @ApiProperty() portfolioId: string;
+    @ApiProperty()
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
+    name: string;
+    @ApiProperty()
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
+    description: string;
+    @ApiProperty()
+    @IsDefined()
+    @IsNotEmpty()
+    @IsUUID()
+    portfolioId: string;
 }
 
 export class ImageDto {

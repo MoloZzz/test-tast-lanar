@@ -1,8 +1,24 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+    Body,
+    Controller,
+    Get,
+    MaxFileSizeValidator,
+    Param,
+    ParseFilePipe,
+    Post,
+    Query,
+    Req,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { ImageService } from './image.service';
 import { CreateImageDto, OdataQueryDto, UUIDParamDto } from 'src/common/dto';
 import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
+import { IProfile } from 'src/common/interface/profile.interface';
 
 @ApiTags('Image CRUD API')
 @Controller('image')
@@ -28,10 +44,11 @@ export class ImageController {
     }
 
     @Post()
-    @ApiOperation({ summary: 'Create image' })
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Create image' })
     @ApiBearerAuth()
-    async createImage(@Body() data: CreateImageDto) {
-        return this.imageService.create(data);
+    async createImage(@Body() data: CreateImageDto, @Req() req: Request) {
+        const profile: IProfile = req.user as IProfile;
+        return this.imageService.create({}, data, profile.id);
     }
 }

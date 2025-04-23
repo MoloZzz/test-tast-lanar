@@ -7,6 +7,7 @@ import { IJwtPayload } from '../interface/jwt-payload.interface';
 import { ProfileModel } from '../sequelize/models/profile.model';
 import { StrategyEnum } from '../enum/strategy.enum';
 import { AuthService } from 'src/auth/auth.service';
+import { ResponseProfileDto } from '../dto/response.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, StrategyEnum.jwt) {
@@ -21,8 +22,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, StrategyEnum.jwt) {
         });
     }
 
-    async validate(payload: IJwtPayload): Promise<ProfileModel> {
-        const profile = await this.authService.validateUserByPayload(payload);
+    async validate(payload: IJwtPayload): Promise<ResponseProfileDto> {
+        const profile: ResponseProfileDto = await this.authService.validateUserByPayload(payload);
         if (!profile) {
             throw new UnauthorizedException('Profile not found');
         }

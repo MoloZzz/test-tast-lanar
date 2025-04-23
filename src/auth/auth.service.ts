@@ -9,6 +9,7 @@ import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { IJwtPayload } from 'src/common/interface/jwt-payload.interface';
 import { ProfileModel } from 'src/common/sequelize/models/profile.model';
+import { ResponseProfileDto } from 'src/common/dto/response.dto';
 
 @Injectable()
 export class AuthService {
@@ -49,9 +50,9 @@ export class AuthService {
         return { accessToken };
     }
 
-    async validateUserByPayload(payload: IJwtPayload): Promise<ProfileModel | null> {
+    async validateUserByPayload(payload: IJwtPayload): Promise<ResponseProfileDto | null> {
         const profile = await this.profileService.findOne({ id: payload.sub });
-        return profile;
+        return plainToClass(ResponseProfileDto, profile, { excludeExtraneousValues: true });
     }
 
     // Now we can loguot only on clients side (remove token from localStorage/cookies).

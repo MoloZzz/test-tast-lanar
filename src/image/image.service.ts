@@ -69,17 +69,14 @@ export class ImageService {
 
     async getById(id: string): Promise<ImageModel | null> {
         const image = await this.imageModel.findByPk(id, {
-            include: [
-                FileModel,
-                PortfolioModel,
-                CommentModel,
-            ],
+            include: [FileModel, PortfolioModel, CommentModel],
         });
         return image;
     }
 
-    async create(data: CreateImageDto): Promise<ImageModel> {
+    async create(file: any | Express.Multer.File, data: CreateImageDto, profileId: string): Promise<ImageModel> {
         // TODO: file logic
+        // TODO: portfolioId by profileId logic
         const newImage = await this.imageModel.create(data);
         return newImage;
     }

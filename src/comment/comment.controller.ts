@@ -25,7 +25,7 @@ export class CommentController {
         @Param() params: UUIDParamDto,
         @Body() createCommentDto: CreateCommentDto,
     ): Promise<CommentModel> {
-        const profile: IProfile = req.user;
+        const profile: IProfile = req.user as IProfile;
         return this.commentService.create(profile.id, params.id, createCommentDto);
     }
 
