@@ -16,12 +16,12 @@ export class ProfileService {
     }
 
     async findOne(option: FindProfileOptions): Promise<ProfileModel> {
-        if(!Object.values(option).some(Boolean)){
+        if (!Object.values(option).some(Boolean)) {
             throw new BadRequestException('At least one search parameter must be provided');
         }
         const profile = await this.profileModel.findOne({
             where: {
-                ...option
+                ...option,
             },
         });
         if (!profile) {

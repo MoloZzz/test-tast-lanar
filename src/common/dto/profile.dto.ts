@@ -62,21 +62,21 @@ export class UpdateProfileDto {
 }
 
 export class FindProfileOptions {
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNotEmpty()
-  @IsUUID()
-  id?: string;
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsNotEmpty()
+    @IsUUID()
+    id?: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNotEmpty()
-  @IsString()
-  username?: string;
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    username?: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNotEmpty()
-  @IsString()
-  email?: string;
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    email?: string;
 }

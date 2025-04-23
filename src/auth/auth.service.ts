@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { AuthResponseDto, LoginDto, ProfileDto, SignupDto } from 'src/common/dto';
 import { IProfile } from 'src/common/interface/profile.interface';
+import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
 export class AuthService {
-    constructor() {}
+    constructor(private readonly profileService: ProfileService) {}
 
     async login(loginDto: LoginDto): Promise<AuthResponseDto> {
         console.log('Login DTO:', loginDto);

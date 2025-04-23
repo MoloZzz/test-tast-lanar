@@ -3,7 +3,6 @@ import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignupDto, LoginDto, AuthResponseDto, ProfileDto } from 'src/common/dto';
 import { Request } from 'express';
-import { IProfile } from 'src/common/interface/profile.interface';
 
 @ApiTags('Auth API')
 @Controller('auth')
