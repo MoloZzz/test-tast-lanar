@@ -6,7 +6,7 @@ import { PortfolioModule } from './portfolio/portfolio.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import * as Joi from 'joi';
-import { PostgresqlModule } from './common/postgresql/postrgesql.module';
+import { PostgresqlModule } from './libs/postgresql/postrgesql.module';
 import { models } from './common/sequelize/models/models';
 import { CommentModule } from './comment/comment.module';
 

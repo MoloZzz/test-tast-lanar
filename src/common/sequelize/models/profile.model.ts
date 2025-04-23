@@ -14,6 +14,9 @@ export class ProfileModel extends Model<ProfileModel> {
     @Column({ unique: true, allowNull: false })
     email: string;
 
+    @Column({ unique: true, allowNull: false })
+    username: string;
+
     @Column({ allowNull: false })
     password: string;
 

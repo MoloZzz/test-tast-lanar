@@ -15,7 +15,6 @@ export class AuthController {
     @ApiBody({ type: SignupDto })
     async signup(@Body() signupDto: SignupDto): Promise<ProfileDto> {
         return this.authService.signup(signupDto);
-        
     }
 
     @Post('login')
@@ -23,7 +22,6 @@ export class AuthController {
     @ApiBody({ type: LoginDto })
     async login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
         return this.authService.login(loginDto);
-
     }
 
     @Post('logout')

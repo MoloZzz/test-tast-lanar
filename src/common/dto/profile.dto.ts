@@ -1,21 +1,61 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsDefined, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class ProfileDto {
-    @ApiProperty({ example: 1, description: 'User ID' })
-    id: number;
+    @ApiProperty({ description: 'UUID' })
+    @IsUUID()
+    id: string;
+
     @ApiProperty({ example: 'user@example.com', description: 'User email' })
+    @IsDefined()
+    @IsEmail()
     email: string;
-    @ApiProperty({ example: 'username', description: 'Username' })
-    username: string;
+
     @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
     description?: string;
+
     @ApiProperty({ example: '2023-10-27T10:00:00.000Z' })
+    @Type(() => Date)
     createdAt: Date;
+}
+
+export class CreateProfileDto {
+    @ApiProperty()
+    @IsDefined()
+    @IsNotEmpty()
+    @IsEmail()
+    email: string;
+
+    @ApiProperty({ example: 'username', description: 'Username' })
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
+    username: string;
+
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    description?: string;
+
+    @ApiProperty()
+    @IsDefined()
+    @IsString()
+    @MinLength(6)
+    password: string;
 }
 
 export class UpdateProfileDto {
     @ApiProperty({ required: false })
-    username?: string;
-    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
     description?: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    username: string;
 }

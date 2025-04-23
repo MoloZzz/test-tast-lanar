@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common';
-import { CommentDto, CreateCommentDto, UpdateCommentDto } from 'src/common/dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { CreateCommentDto, CommentDto, UpdateCommentDto } from 'src/common/dto';
+import { CommentModel } from 'src/common/sequelize/models/comment.model';
 
 @Injectable()
 export class CommentService {
-    constructor() {}
+    constructor(
+        @InjectModel(CommentModel)
+        private readonly commentModel: typeof CommentModel,
+    ) {}
 
-    async create(profileId: any, imageId: number, createCommentDto: CreateCommentDto): Promise<CommentDto> {
-        console.log('Add Comment to Image ID:', imageId, 'DTO:', createCommentDto);
-        return {} as CommentDto; // Placeholder
+    async create(profileId: string, imageId: string, createCommentDto: CreateCommentDto): Promise<CommentModel> {
+        const comment: CommentModel = await this.commentModel.create({
+            content: createCommentDto.content,
+            imageId,
+            profileId,
+        });
+
+        return comment;
     }
 
-    async getImagesByImageId(imageId: number, limit?: number, offset?: number): Promise<CommentDto[]> {
-        console.log('Fetching comments for imageId:', imageId);
-        return [];
+    async getCommentsByImageId(imageId: string, limit?: number, offset?: number): Promise<CommentModel[]> {
+        const comments: CommentModel[] = await this.commentModel.findAll({
+            where: { imageId },
+            limit,
+            offset,
+            order: [['createdAt', 'DESC']],
+        });
+
+        return comments;
     }
 
-    async update(commentId: number, updateCommentDto: UpdateCommentDto): Promise<CommentDto> {
-        console.log('Update Comment ID:', commentId, 'DTO:', updateCommentDto);
-        return {} as CommentDto; 
+    //TODO: add isAuthor checker
+    async update(commentId: string, updateCommentDto: UpdateCommentDto): Promise<CommentModel> {
+        const comment = await this.commentModel.findByPk(commentId);
+        if (!comment) {
+            throw new NotFoundException('Comment not found');
+        }
+
+        await comment.update(updateCommentDto);
+        return comment;
     }
 
-    async delete(commentId: number): Promise<void> {
-        console.log('Delete Comment ID:', commentId);
+    //TODO: add isAuthor checker
+    async delete(commentId: string): Promise<void> {
+        const comment = await this.commentModel.findByPk(commentId);
+        if (!comment) {
+            throw new NotFoundException('Comment not found');
+        }
+
+        await comment.destroy();
     }
 }
