@@ -18,7 +18,7 @@ export class AuthService {
         private readonly configService: ConfigService,
     ) {}
 
-    generateToken(id, email, username): string {
+    generateToken(id: string, email: string, username: string): string {
         const payload: IJwtPayload = {
             sub: id,
             email: email,
@@ -42,7 +42,7 @@ export class AuthService {
     async login(loginDto: LoginDto): Promise<AuthResponseDto> {
         const profile = await this.profileService.findOne({ email: loginDto.email });
         if (!profile || !(await bcrypt.compare(loginDto.password, profile.password))) {
-            throw new UnauthorizedException('Невірні облікові дані');
+            throw new UnauthorizedException('Wrong email or password');
         }
 
         const accessToken = this.generateToken(profile.id, profile.email, profile.username);

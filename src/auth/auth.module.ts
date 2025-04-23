@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { StrategyEnum } from 'src/common/enum/strategy.enum';
+import { JwtStrategy } from 'src/common/strategy/jwt.strategy';
 
 @Module({
     imports: [
@@ -20,6 +21,6 @@ import { StrategyEnum } from 'src/common/enum/strategy.enum';
         }),
     ],
     controllers: [AuthController],
-    providers: [AuthService],
+    providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { CreateCommentDto, CommentDto, UpdateCommentDto, UUIDParamDto, PaginationQueryDto } from 'src/common/dto';
 import { Request } from 'express';
