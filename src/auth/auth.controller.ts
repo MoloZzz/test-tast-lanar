@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { SignupDto, LoginDto, AuthResponseDto, ProfileDto } from 'src/common/dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
+import { IMessageResponse } from 'src/common/interface/response.interface';
 
 @ApiTags('Auth API')
 @Controller('auth')
@@ -24,9 +25,8 @@ export class AuthController {
     }
 
     @Post('logout')
-    @ApiOperation({ summary: 'Log out the current Profile (optional)' })
-    async logout(@Req() req: Request): Promise<{ message: string }> {
-        const profile = {}; //req.profile as IProfile;
-        return this.authService.logout(profile);
+    @ApiOperation({ summary: 'Log out the current Profile (optional, now It is doing nothing)' })
+    async logout(@Req() req: Request, @Res() res: Response): Promise<IMessageResponse> {
+        return this.authService.logout(req, res);
     }
 }

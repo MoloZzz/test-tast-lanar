@@ -4,6 +4,7 @@ import { CommentService } from './comment.service';
 import { CreateCommentDto, CommentDto, UpdateCommentDto, UUIDParamDto, PaginationQueryDto } from 'src/common/dto';
 import { Request } from 'express';
 import { CommentModel } from 'src/common/sequelize/models/comment.model';
+import { IProfile } from 'src/common/interface/profile.interface';
 
 @ApiTags('Comment CRUD API')
 @Controller('comment')
@@ -24,8 +25,8 @@ export class CommentController {
         @Param() params: UUIDParamDto,
         @Body() createCommentDto: CreateCommentDto,
     ): Promise<CommentModel> {
-        const profileId = 'asdasdsadsasa'; // req.profile.profileId;
-        return this.commentService.create(profileId, params.id, createCommentDto);
+        const profile : IProfile = req.user;
+        return this.commentService.create(profile.id, params.id, createCommentDto);
     }
 
     @Patch(':id')

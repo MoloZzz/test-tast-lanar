@@ -18,7 +18,7 @@ export class ProfileModel extends Model<ProfileModel> {
     @Column({ unique: true, allowNull: false })
     username: string;
 
-    @Exclude({ toPlainOnly: true })
+    @Exclude()
     @Column({ allowNull: false })
     password: string;
 

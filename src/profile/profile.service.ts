@@ -24,9 +24,6 @@ export class ProfileService {
                 ...option,
             },
         });
-        if (!profile) {
-            throw new NotFoundException('Profile not found');
-        }
         return profile;
     }
 

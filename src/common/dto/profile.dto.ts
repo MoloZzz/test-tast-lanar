@@ -1,26 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDefined, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
-import { Type } from 'class-transformer';
-import { OnlyOneField } from '../custom-validator/only-one-field';
+import { Exclude, Expose, Type } from 'class-transformer';
 
 export class ProfileDto {
-    @ApiProperty({ description: 'UUID' })
-    @IsUUID()
+    @Expose()
     id: string;
 
-    @ApiProperty({ example: 'user@example.com', description: 'User email' })
-    @IsDefined()
-    @IsEmail()
+    @Expose()
     email: string;
 
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @IsString()
-    description?: string;
+    @Expose()
+    username: string;
 
-    @ApiProperty({ example: '2023-10-27T10:00:00.000Z' })
-    @Type(() => Date)
+    @Expose()
     createdAt: Date;
+
+    @Expose()
+    updatedAt: Date;
+
+    @Exclude()
+    password: string;
 }
 
 export class CreateProfileDto {
@@ -36,11 +35,6 @@ export class CreateProfileDto {
     @IsString()
     username: string;
 
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @IsString()
-    description?: string;
-
     @ApiProperty()
     @IsDefined()
     @IsString()
@@ -49,11 +43,6 @@ export class CreateProfileDto {
 }
 
 export class UpdateProfileDto {
-    @ApiProperty({ required: false })
-    @IsOptional()
-    @IsString()
-    description?: string;
-
     @ApiProperty()
     @IsOptional()
     @IsNotEmpty()
