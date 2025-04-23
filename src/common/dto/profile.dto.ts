@@ -27,7 +27,7 @@ export class CreateProfileDto {
     @ApiProperty()
     @IsDefined()
     @IsNotEmpty()
-    @IsEmail()
+    @IsEmail({}, { message: 'Invalid email format' })
     email: string;
 
     @ApiProperty({ example: 'username', description: 'Username' })
@@ -44,7 +44,7 @@ export class CreateProfileDto {
     @ApiProperty()
     @IsDefined()
     @IsString()
-    @MinLength(6)
+    @MinLength(8, { message: 'Password must be at least 8 characters long' })
     password: string;
 }
 
