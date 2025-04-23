@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDefined, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
 import { Type } from 'class-transformer';
+import { OnlyOneField } from '../custom-validator/only-one-field';
 
 export class ProfileDto {
     @ApiProperty({ description: 'UUID' })
@@ -58,4 +59,24 @@ export class UpdateProfileDto {
     @IsNotEmpty()
     @IsString()
     username: string;
+}
+
+export class FindProfileOptions {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNotEmpty()
+  @IsUUID()
+  id?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  username?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  email?: string;
 }

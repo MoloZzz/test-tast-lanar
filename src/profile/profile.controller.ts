@@ -1,12 +1,19 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProfileService } from './profile.service';
-import { CreateProfileDto, UUIDParamDto } from 'src/common/dto';
+import { CreateProfileDto, FindProfileOptions, UUIDParamDto } from 'src/common/dto';
+import { ProfileModel } from 'src/common/sequelize/models/profile.model';
 
 @ApiTags('Profile CRUD API')
 @Controller('profile')
 export class ProfileController {
     constructor(private readonly profileService: ProfileService) {}
+
+    @Get()
+    @ApiOperation({ summary: 'Find one profile by id, username, or email' })
+    async findOne(@Query() query: FindProfileOptions): Promise<ProfileModel> {
+        return this.profileService.findOne(query);
+    }
 
     @Post()
     @ApiOperation({ summary: 'Create a new profile. Use Auth.signup method to create profile' })

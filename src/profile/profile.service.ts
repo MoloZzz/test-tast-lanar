@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateProfileDto } from 'src/common/dto';
+import { CreateProfileDto, FindProfileOptions } from 'src/common/dto';
 import { ProfileModel } from 'src/common/sequelize/models/profile.model';
 
 @Injectable()
@@ -12,6 +12,21 @@ export class ProfileService {
 
     async create(createProfileDto: CreateProfileDto): Promise<ProfileModel> {
         const profile: ProfileModel = await this.profileModel.create(createProfileDto);
+        return profile;
+    }
+
+    async findOne(option: FindProfileOptions): Promise<ProfileModel> {
+        if(!Object.values(option).some(Boolean)){
+            throw new BadRequestException('At least one search parameter must be provided');
+        }
+        const profile = await this.profileModel.findOne({
+            where: {
+                ...option
+            },
+        });
+        if (!profile) {
+            throw new NotFoundException('Profile not found');
+        }
         return profile;
     }
 
