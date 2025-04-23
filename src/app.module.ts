@@ -9,6 +9,7 @@ import * as Joi from 'joi';
 import { PostgresqlModule } from './libs/postgresql/postrgesql.module';
 import { models } from './common/sequelize/models/models';
 import { CommentModule } from './comment/comment.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { CommentModule } from './comment/comment.module';
         AuthModule,
         PostgresqlModule.register(models),
         CommentModule,
+        ImageModule,
     ],
     controllers: [AppController],
     providers: [],

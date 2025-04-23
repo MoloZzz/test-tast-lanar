@@ -5,3 +5,4 @@ export * from './portfolio.dto';
 export * from './image.dto';
 export * from './file.dto';
 export * from './common.dto';
+export { OdataQueryDto } from './odata-query.dto';

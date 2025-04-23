@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateImageDto {
-    @ApiProperty({ type: 'string', format: 'binary' }) file: any;
+    @ApiProperty() file: any;
     @ApiProperty({ required: false }) name?: string;
     @ApiProperty({ required: false }) description?: string;
+    @ApiProperty() portfolioId: string;
 }
 
 export class ImageDto {
