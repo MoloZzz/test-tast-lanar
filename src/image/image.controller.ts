@@ -8,11 +8,11 @@ import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 @Controller('image')
 export class ImageController {
     constructor(private readonly imageService: ImageService) {}
-    
+
     @Get()
-    @ApiOperation({ summary: 'Get all images by odata query' })    
+    @ApiOperation({ summary: 'Get all images by odata query' })
     async getAllImages(@Query() query: OdataQueryDto) {
-        return this.imageService.getAllImagesByOdata(query);    
+        return this.imageService.getAllImagesByOdata(query);
     }
 
     @Get(':id')
@@ -33,5 +33,5 @@ export class ImageController {
     @ApiBearerAuth()
     async createImage(@Body() data: CreateImageDto) {
         return this.imageService.create(data);
-    } 
+    }
 }

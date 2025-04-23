@@ -62,6 +62,14 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## Migrations
+```
+generate file migration:
+npx sequelize-cli migration:generate --name migration-name
+migrate:
+npx sequelize-cli db:migrate
+```
 # General
 - Author: MoloZzz
 - Licence: MIT
