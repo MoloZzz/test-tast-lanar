@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PortfolioService } from './portfolio.service';
-import { CreatePortfolioDto } from 'src/common/dto';
+import { CreatePortfolioDto, UUIDParamDto } from 'src/common/dto';
 import { Request } from 'express';
 import { IProfile } from 'src/common/interface/profile.interface';
 import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
@@ -18,6 +18,14 @@ export class PortfolioController {
     async create(@Body() data: CreatePortfolioDto, @Req() req: Request) {
         const profile: IProfile = req.user;
         return this.portfolioService.create(profile.id, data);
+    }
 
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Delete your portfolio' })
+    @ApiBearerAuth()
+    async delete(@Param() params: UUIDParamDto, @Req() req: Request) {
+        const profile: IProfile = req.user;
+        return this.portfolioService.delete(profile.id, params.id);
     }
 }
