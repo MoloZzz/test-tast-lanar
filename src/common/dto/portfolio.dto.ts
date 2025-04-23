@@ -1,10 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ImageDto } from './image.dto';
+import { IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePortfolioDto {
     @ApiProperty({ description: 'Portfolio name' })
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
     name: string;
+
     @ApiProperty({ required: false })
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
     description?: string;
 }
 
