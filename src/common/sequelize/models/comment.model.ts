@@ -14,6 +14,9 @@ export class CommentModel extends Model<CommentModel> {
     @Column({ type: DataType.TEXT })
     content: string;
 
+    @Column({ type: DataType.STRING })
+    username: string;
+
     @ForeignKey(() => ProfileModel)
     @Column({ type: DataType.UUID })
     profileId: string;

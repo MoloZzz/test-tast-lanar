@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateCommentDto, CommentDto, UpdateCommentDto } from 'src/common/dto';
+import { IProfile } from 'src/common/interface/profile.interface';
 import { CommentModel } from 'src/common/sequelize/models/comment.model';
 
 @Injectable()
@@ -10,11 +11,12 @@ export class CommentService {
         private readonly commentModel: typeof CommentModel,
     ) {}
 
-    async create(profileId: string, imageId: string, createCommentDto: CreateCommentDto): Promise<CommentModel> {
+    async create(profile: IProfile, imageId: string, createCommentDto: CreateCommentDto): Promise<CommentModel> {
         const comment: CommentModel = await this.commentModel.create({
             content: createCommentDto.content,
+            username: profile.username,
             imageId,
-            profileId,
+            profileId: profile.id,
         });
 
         return comment;

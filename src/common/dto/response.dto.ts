@@ -5,4 +5,6 @@ export class ResponseProfileDto {
     id: string;
     @Expose()
     email: string;
+    @Expose()
+    username: string;
 }

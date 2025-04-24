@@ -29,7 +29,7 @@ export class CommentController {
         @Body() createCommentDto: CreateCommentDto,
     ): Promise<CommentModel> {
         const profile: IProfile = req.user as IProfile;
-        return this.commentService.create(profile.id, params.id, createCommentDto);
+        return this.commentService.create(profile, params.id, createCommentDto);
     }
 
     @Patch(':id')
