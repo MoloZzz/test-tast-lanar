@@ -2,6 +2,7 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { CreateImageDto } from 'src/common/dto';
+import { baseImageFindOptions } from 'src/common/find-options/image-base';
 import { CommentModel } from 'src/common/sequelize/models/comment.model';
 import { FileModel } from 'src/common/sequelize/models/file.model';
 import { ImageModel } from 'src/common/sequelize/models/image.model';
@@ -24,7 +25,7 @@ export class ImageService {
         const findOptions: FindOptions = {
             where: {},
             order: [['createdAt', 'DESC']],
-            include: [],
+            ...baseImageFindOptions,
         };
 
         if (query.$top !== undefined) {
@@ -67,7 +68,7 @@ export class ImageService {
                 portfolioId: portfolioId,
             },
             order: [['createdAt', 'DESC']],
-            include: [FileModel, PortfolioModel, CommentModel],
+            ...baseImageFindOptions,
         });
 
         return images;
@@ -81,7 +82,7 @@ export class ImageService {
     }
 
     async create(file: any | Express.Multer.File, data: CreateImageDto, profileId: string): Promise<ImageModel> {
-        if(!this.portfolioService.isAuthor(profileId, data.portfolioId)) {
+        if (!this.portfolioService.isAuthor(profileId, data.portfolioId)) {
             throw new BadRequestException('You are not allowed to create image for this portfolio');
         }
         const savedFile: FileModel = await this.fileService.saveFile(file);
@@ -91,7 +92,12 @@ export class ImageService {
 
     async delete(imageId: string, profileId: string): Promise<void> {
         const image = await this.imageModel.findByPk(imageId, {
-            include: [FileModel, PortfolioModel],
+            attributes: ['id', 'fileId'], 
+            include: [{
+                model: PortfolioModel,
+                attributes: ['profileId'],
+                required: true,
+            }],
         });
         if (!image) {
             throw new NotFoundException('Image not found');

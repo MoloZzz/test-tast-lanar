@@ -32,7 +32,7 @@ export class CommentService {
     }
 
     //TODO: add isAuthor checker
-    async update(commentId: string, updateCommentDto: UpdateCommentDto): Promise<CommentModel> {
+    async update(commentId: string, updateCommentDto: UpdateCommentDto, profileId: string): Promise<CommentModel> {
         const comment = await this.commentModel.findByPk(commentId);
         if (!comment) {
             throw new NotFoundException('Comment not found');
@@ -43,7 +43,7 @@ export class CommentService {
     }
 
     //TODO: add isAuthor checker
-    async delete(commentId: string): Promise<void> {
+    async delete(commentId: string, profileId: string): Promise<void> {
         const comment = await this.commentModel.findByPk(commentId);
         if (!comment) {
             throw new NotFoundException('Comment not found');

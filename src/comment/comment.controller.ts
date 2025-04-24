@@ -36,12 +36,14 @@ export class CommentController {
         @Param() params: UUIDParamDto,
         @Body() updateCommentDto: UpdateCommentDto,
     ): Promise<CommentModel> {
-        return this.commentService.update(params.id, updateCommentDto);
+        const profile: IProfile = req.user as IProfile;
+        return this.commentService.update(params.id, updateCommentDto, profile.id);
     }
 
     @Delete(':id')
     @ApiOperation({ summary: 'Delete a specific comment' })
     async deleteComment(@Req() req: Request, @Param() params: UUIDParamDto): Promise<void> {
-        return this.commentService.delete(params.id);
+        const profile: IProfile = req.user as IProfile;
+        return this.commentService.delete(params.id, profile.id);
     }
 }

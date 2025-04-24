@@ -20,7 +20,7 @@ export class PortfolioController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Get portfolio by id' })
-    async getPortfolioById(@Param() params: UUIDParamDto) : Promise<PortfolioModel> {
+    async getPortfolioById(@Param() params: UUIDParamDto): Promise<PortfolioModel> {
         return this.portfolioService.getPortfolioById(params.id);
     }
 
