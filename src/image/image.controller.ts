@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { ImageService } from './image.service';
-import { CreateImageDto, OdataQueryDto, UUIDParamDto } from 'src/common/dto';
+import { CreateImageDto, CreateImageMultipartDto, OdataQueryDto, UUIDParamDto } from 'src/common/dto';
 import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
@@ -47,8 +47,11 @@ export class ImageController {
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create image' })
     @ApiBearerAuth()
-    async createImage(@Body() data: CreateImageDto, @Req() req: Request) {
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({type: CreateImageMultipartDto})
+    async createImage(@UploadedFile() file: Express.Multer.File, @Body() data: CreateImageDto, @Req() req: Request) {
         const profile: IProfile = req.user as IProfile;
-        return this.imageService.create({}, data, profile.id);
+        return this.imageService.create(file, data, profile.id);
     }
 }

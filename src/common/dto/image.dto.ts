@@ -19,6 +19,20 @@ export class CreateImageDto {
     portfolioId: string;
 }
 
+export class CreateImageMultipartDto {
+    @ApiProperty({ type: 'string', format: 'binary', description: 'Файл зображення для завантаження' })
+    file: any;
+    
+    @ApiProperty()
+    name: string;
+
+    @ApiProperty()
+    description: string;
+
+    @ApiProperty()
+    portfolioId: string;
+  }
+
 export class ImageDto {
     @ApiProperty() id: number;
     @ApiProperty() portfolioId: number;
