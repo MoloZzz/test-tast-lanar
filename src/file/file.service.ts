@@ -27,7 +27,7 @@ export class FileService {
         const dbPath = `/static/${uniqueFilename}`;
         try {
             const fileModel = await this.fileModel.create({
-                filename: file.filename,
+                filename: uniqueFilename,
                 originalname: file.originalname,
                 path: dbPath,
                 mimetype: file.mimetype,

@@ -92,15 +92,13 @@ export class ImageService {
     }
 
     async delete(imageId: string, profileId: string): Promise<void> {
-        const image = await this.imageModel.findByPk(imageId, {
-            attributes: ['id', 'fileId'],
-            include: [
-                {
-                    model: PortfolioModel,
-                    attributes: ['profileId'],
-                    required: true,
-                },
-            ],
+        const image: ImageModel = await this.imageModel.findByPk(imageId,{ 
+            attributes: ['id', 'fileId', 'portfolioId'],
+            include: [{
+                model: PortfolioModel, 
+                attributes: ['profileId'], 
+                required: true 
+            }],
         });
         if (!image) {
             throw new NotFoundException('Image not found');
