@@ -46,6 +46,8 @@ export class CommentController {
     }
 
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     @ApiOperation({ summary: 'Delete a specific comment' })
     async deleteComment(@Req() req: Request, @Param() params: UUIDParamDto): Promise<void> {
         const profile: IProfile = req.user as IProfile;

@@ -14,7 +14,7 @@ export const baseImageFindOptions: FindOptions = {
             model: FileModel,
             attributes: ['id', 'filename', 'path'],
         },
-        {   
+        {
             model: CommentModel,
             attributes: ['id', 'content', 'username'],
         },

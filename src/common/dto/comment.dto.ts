@@ -24,5 +24,8 @@ export class CommentDto {
 
 export class UpdateCommentDto {
     @ApiProperty({ description: 'Updated comment text' })
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
     content?: string;
 }

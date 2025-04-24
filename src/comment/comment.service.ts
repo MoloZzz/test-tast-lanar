@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateCommentDto, CommentDto, UpdateCommentDto } from 'src/common/dto';
+import { CreateCommentDto, UpdateCommentDto } from 'src/common/dto';
 import { IProfile } from 'src/common/interface/profile.interface';
 import { CommentModel } from 'src/common/sequelize/models/comment.model';
 
@@ -33,24 +33,26 @@ export class CommentService {
         return comments;
     }
 
-    //TODO: add isAuthor checker
     async update(commentId: string, updateCommentDto: UpdateCommentDto, profileId: string): Promise<CommentModel> {
         const comment = await this.commentModel.findByPk(commentId);
         if (!comment) {
             throw new NotFoundException('Comment not found');
         }
-
+        if (comment.profileId !== profileId) {
+            throw new BadRequestException('You have no permission to update this comment');
+        }
         await comment.update(updateCommentDto);
         return comment;
     }
 
-    //TODO: add isAuthor checker
     async delete(commentId: string, profileId: string): Promise<void> {
         const comment = await this.commentModel.findByPk(commentId);
         if (!comment) {
             throw new NotFoundException('Comment not found');
         }
-
+        if (comment.profileId !== profileId) {
+            throw new BadRequestException('You have no permission to update this comment');
+        }
         await comment.destroy();
     }
 }
