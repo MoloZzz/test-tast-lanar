@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { CreateImageDto } from 'src/common/dto';
@@ -17,7 +17,7 @@ export class ImageService {
         private readonly imageModel: typeof ImageModel,
         @Inject(FileService)
         private readonly fileService: FileService,
-        @Inject(PortfolioService)
+        @Inject(forwardRef(() => PortfolioService))
         private readonly portfolioService: PortfolioService,
     ) {}
 
@@ -92,13 +92,15 @@ export class ImageService {
     }
 
     async delete(imageId: string, profileId: string): Promise<void> {
-        const image: ImageModel = await this.imageModel.findByPk(imageId,{ 
+        const image: ImageModel = await this.imageModel.findByPk(imageId, {
             attributes: ['id', 'fileId', 'portfolioId'],
-            include: [{
-                model: PortfolioModel, 
-                attributes: ['profileId'], 
-                required: true 
-            }],
+            include: [
+                {
+                    model: PortfolioModel,
+                    attributes: ['profileId'],
+                    required: true,
+                },
+            ],
         });
         if (!image) {
             throw new NotFoundException('Image not found');
@@ -110,5 +112,29 @@ export class ImageService {
             await this.fileService.deleteFile(image.fileId);
         }
         await image.destroy();
+    }
+
+    async deleteImagesByPortfolioId(portfolioId: string, profileId: string): Promise<void> {
+        const checkAuthor: boolean = await this.portfolioService.isAuthor(profileId, portfolioId);
+        if (!checkAuthor) {
+            throw new BadRequestException('You are not allowed to delete images for this portfolio');
+        }
+        const imagesToDelete = await this.imageModel.findAll({
+            where: { portfolioId: portfolioId },
+            attributes: ['id', 'fileId'],
+        });
+
+        const fileDeletionPromises = imagesToDelete
+            .filter((image) => image.fileId)
+            .map((image) => this.fileService.deleteFile(image.fileId));
+
+        await Promise.allSettled(fileDeletionPromises);
+
+        const deletedCount = await this.imageModel.destroy({
+            where: { portfolioId: portfolioId },
+        });
+
+        console.log(`Deleted ${deletedCount} imgs for portfolio ${portfolioId}`);
+        //Commnets deleting automatically by cascade
     }
 }

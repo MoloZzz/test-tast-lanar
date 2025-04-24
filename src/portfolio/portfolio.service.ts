@@ -1,14 +1,17 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreatePortfolioDto } from 'src/common/dto';
 import { basePortfolioFindOptions } from 'src/common/find-options/portfolio-base';
 import { PortfolioModel } from 'src/common/sequelize/models/portfolio.model';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable()
 export class PortfolioService {
     constructor(
         @InjectModel(PortfolioModel)
         private readonly portfolioModel: typeof PortfolioModel,
+        @Inject(ImageService)
+        private readonly imageService: ImageService,
     ) {}
 
     async getPortfoliosByProfileId(profileId: string): Promise<PortfolioModel[]> {
@@ -33,6 +36,8 @@ export class PortfolioService {
     }
 
     async delete(profileId: string, portfolioId: string): Promise<void> {
+        await this.imageService.deleteImagesByPortfolioId(portfolioId, profileId);
+        // We already checked permissions in the imageService method
         const portfolio = await this.portfolioModel.findOne({
             where: {
                 id: portfolioId,
