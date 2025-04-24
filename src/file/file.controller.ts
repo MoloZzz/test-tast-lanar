@@ -15,7 +15,7 @@ export class FileController {
         const fileData = await this.fileService.getFileContentByFileId(params.id);
         res.set({
             'Content-Type': fileData.mimetype,
-            'Content-Disposition': `inline; filename="${fileData.mimetype.split('/')[1]}"`,
+            'Content-Disposition': `inline; filename="${encodeURIComponent(fileData.mimetype.split('/')[1])}"`,
             'Content-Length': fileData.size,
         });
         return new StreamableFile(fileData.stream);
