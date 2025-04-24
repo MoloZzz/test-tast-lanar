@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
-import { CreateCommentDto, CommentDto, UpdateCommentDto, UUIDParamDto, PaginationQueryDto } from 'src/common/dto';
+import { CreateCommentDto, UpdateCommentDto, UUIDParamDto, PaginationQueryDto } from 'src/common/dto';
 import { Request } from 'express';
 import { CommentModel } from 'src/common/sequelize/models/comment.model';
 import { IProfile } from 'src/common/interface/profile.interface';
+import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 
 @ApiTags('Comment CRUD API')
 @Controller('comment')
@@ -20,6 +21,8 @@ export class CommentController {
 
     @Post('image/:id')
     @ApiOperation({ summary: 'Add a comment to an image' })
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     async addComment(
         @Req() req: Request,
         @Param() params: UUIDParamDto,
@@ -31,6 +34,8 @@ export class CommentController {
 
     @Patch(':id')
     @ApiOperation({ summary: 'Update a specific comment' })
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth()
     async updateComment(
         @Req() req: Request,
         @Param() params: UUIDParamDto,
