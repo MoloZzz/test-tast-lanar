@@ -73,6 +73,21 @@ migrate:
 ```
 npx sequelize-cli db:migrate
 ```
+
+## Env
+```
+PORT=7000
+API_DOCS_ENABLED=true
+
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASS=password
+POSTGRES_DB_NAME=lanars-task-db
+POSTGRES_IS_LOGGING_ENABLED=false
+
+JWT_SECRET=secret
+JWT_EXPIRES_IN=1h
 ```
 # General
 - Author: MoloZzz
