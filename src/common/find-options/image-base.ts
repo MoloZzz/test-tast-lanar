@@ -4,7 +4,7 @@ import { FileModel } from '../sequelize/models/file.model';
 import { PortfolioModel } from '../sequelize/models/portfolio.model';
 
 export const baseImageFindOptions: FindOptions = {
-    attributes: ['id', 'name', 'description'],
+    attributes: ['id', 'name', 'description', 'createdAt', 'updatedAt'],
     include: [
         {
             model: PortfolioModel,

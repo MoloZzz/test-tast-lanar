@@ -1,13 +1,17 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateProfileDto, FindProfileOptions } from 'src/common/dto';
+import { IMessageResponse } from 'src/common/interface/response.interface';
 import { ProfileModel } from 'src/common/sequelize/models/profile.model';
+import { PortfolioService } from 'src/portfolio/portfolio.service';
 
 @Injectable()
 export class ProfileService {
     constructor(
         @InjectModel(ProfileModel)
         private readonly profileModel: typeof ProfileModel,
+        @Inject(PortfolioService)
+        private readonly portfolioService: PortfolioService,
     ) {}
 
     async create(createProfileDto: CreateProfileDto): Promise<ProfileModel> {
@@ -27,7 +31,8 @@ export class ProfileService {
         return profile;
     }
 
-    async delete(id: string) {
+    async delete(id: string): Promise<IMessageResponse> {
+        await this.portfolioService.deleteByProfileId(id);
         const deletedCount = await this.profileModel.destroy({
             where: {
                 id,

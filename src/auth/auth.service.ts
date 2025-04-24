@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { AuthResponseDto, LoginDto, ProfileDto, SignupDto } from 'src/common/dto';
 import { ProfileService } from 'src/profile/profile.service';
@@ -14,6 +14,7 @@ import { ResponseProfileDto } from 'src/common/dto/response.dto';
 @Injectable()
 export class AuthService {
     constructor(
+        @Inject(forwardRef(() => ProfileService))
         private readonly profileService: ProfileService,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,

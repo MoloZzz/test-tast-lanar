@@ -54,6 +54,27 @@ export class PortfolioService {
         await portfolio.destroy();
     }
 
+    async deleteByProfileId(profileId: string): Promise<void> {
+        const portfoliosToDelete = await this.portfolioModel.findAll({
+            where: { profileId },
+            attributes: ['id'],
+        });
+        if (portfoliosToDelete.length === 0) {
+            console.log(`Profile ${profileId} have no portfolios to delete`);
+            return;
+        }
+        const imageDeletionPromises = portfoliosToDelete.map((portfolio) =>
+            this.imageService.deleteImagesByPortfolioId(portfolio.id, profileId),
+        );
+        await Promise.all(imageDeletionPromises);
+
+        const deletedCount = await this.portfolioModel.destroy({
+            where: { profileId: profileId },
+        });
+
+        console.log(`Deleted ${deletedCount} portfolios for ${profileId}`);
+    }
+
     async isAuthor(profileId: string, portfolioId: string): Promise<boolean> {
         const portfolio = await this.portfolioModel.findOne({
             where: {
