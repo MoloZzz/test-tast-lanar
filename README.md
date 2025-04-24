@@ -89,6 +89,17 @@ POSTGRES_IS_LOGGING_ENABLED=false
 JWT_SECRET=secret
 JWT_EXPIRES_IN=1h
 ```
+
+## Next steps
+Here are some potential next steps and areas for further development and improvement:
+
+- *Token Management with Redis*:
+We can integrate a Redis database to enhance our JWT token management. Redis, being an in-memory data structure store, is ideal for quickly saving and checking token validity. This can be particularly useful for implementing features like:
+- Token Blacklisting: Storing invalidated tokens (e.g., upon logout or when a security event occurs) in Redis allows us to quickly check if a presented token is still considered valid on the server-side, even before its natural expiration.
+- Session Management (Optional): While JWTs are typically stateless, Redis can be used to store session-related data linked to a user's token, if needed for specific application requirements.
+- Rate Limiting: Redis can be used to implement rate limiting based on user tokens or other identifiers.
+
+Easier Development Setup: New developers can get the project running quickly by simply building and running the Docker containers.
 # General
 - Author: MoloZzz
 - Licence: MIT

@@ -23,7 +23,7 @@ async function bootstrap() {
     if (configService.get<string>('API_DOCS_ENABLED') === 'true') {
         const config = new DocumentBuilder()
             .setTitle('Portfolio publication API')
-            .setDescription('Task for Lanar company')
+            .setDescription('Task for Lanars company')
             .setVersion('1.0')
             .addBearerAuth()
             .build();
