@@ -17,7 +17,7 @@ export class FileModel extends Model<FileModel> {
     mimetype: string;
 
     @Column
-    encoding: string;
+    originalname: string;
 
     @Column
     path: string;

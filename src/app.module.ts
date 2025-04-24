@@ -10,6 +10,8 @@ import { PostgresqlModule } from './libs/postgresql/postrgesql.module';
 import { models } from './common/sequelize/models/models';
 import { CommentModule } from './comment/comment.module';
 import { ImageModule } from './image/image.module';
+import * as path from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
     imports: [
@@ -34,6 +36,10 @@ import { ImageModule } from './image/image.module';
         PostgresqlModule.register(models),
         CommentModule,
         ImageModule,
+        ServeStaticModule.forRoot({
+            rootPath: path.join(__dirname, '..', 'static'), 
+            serveRoot: '/static',
+          }),
     ],
     controllers: [AppController],
     providers: [],

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { CreateImageDto } from 'src/common/dto';
@@ -6,12 +6,15 @@ import { CommentModel } from 'src/common/sequelize/models/comment.model';
 import { FileModel } from 'src/common/sequelize/models/file.model';
 import { ImageModel } from 'src/common/sequelize/models/image.model';
 import { PortfolioModel } from 'src/common/sequelize/models/portfolio.model';
+import { FileService } from 'src/file/file.service';
 
 @Injectable()
 export class ImageService {
     constructor(
         @InjectModel(ImageModel)
         private readonly imageModel: typeof ImageModel,
+        @Inject(FileService)
+        private readonly fileService: FileService,
     ) {}
 
     async getAllImagesByOdata(query: any): Promise<ImageModel[]> {
@@ -77,7 +80,8 @@ export class ImageService {
     async create(file: any | Express.Multer.File, data: CreateImageDto, profileId: string): Promise<ImageModel> {
         // TODO: file logic
         // TODO: portfolioId by profileId logic
-        const newImage = await this.imageModel.create(data);
+        const savedFile: FileModel = await this.fileService.saveFile(file);
+        const newImage = await this.imageModel.create({...data, fileId: savedFile.id});
         return newImage;
     }
 }

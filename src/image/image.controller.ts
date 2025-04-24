@@ -19,6 +19,9 @@ import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { IProfile } from 'src/common/interface/profile.interface';
+import { diskStorage } from 'multer';
+import * as os from 'os';
+import * as path from 'path';
 
 @ApiTags('Image CRUD API')
 @Controller('image')
@@ -47,7 +50,17 @@ export class ImageController {
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create image' })
     @ApiBearerAuth()
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('file', {
+        storage: diskStorage({ 
+            destination: os.tmpdir(),
+            filename: (req, file, cb) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const ext = path.extname(file.originalname);
+                file.originalname = Buffer.from(file.originalname, 'latin1').toString();
+                cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+            },
+        }),
+    })) // Use the diskStorage to save the file temporarily
     @ApiConsumes('multipart/form-data')
     @ApiBody({type: CreateImageMultipartDto})
     async createImage(@UploadedFile() file: Express.Multer.File, @Body() data: CreateImageDto, @Req() req: Request) {
