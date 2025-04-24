@@ -82,7 +82,8 @@ export class ImageService {
     }
 
     async create(file: any | Express.Multer.File, data: CreateImageDto, profileId: string): Promise<ImageModel> {
-        if (!this.portfolioService.isAuthor(profileId, data.portfolioId)) {
+        const isAuthor = await this.portfolioService.isAuthor(profileId, data.portfolioId);
+        if (!isAuthor) {
             throw new BadRequestException('You are not allowed to create image for this portfolio');
         }
         const savedFile: FileModel = await this.fileService.saveFile(file);
@@ -92,12 +93,14 @@ export class ImageService {
 
     async delete(imageId: string, profileId: string): Promise<void> {
         const image = await this.imageModel.findByPk(imageId, {
-            attributes: ['id', 'fileId'], 
-            include: [{
-                model: PortfolioModel,
-                attributes: ['profileId'],
-                required: true,
-            }],
+            attributes: ['id', 'fileId'],
+            include: [
+                {
+                    model: PortfolioModel,
+                    attributes: ['profileId'],
+                    required: true,
+                },
+            ],
         });
         if (!image) {
             throw new NotFoundException('Image not found');

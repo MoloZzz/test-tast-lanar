@@ -1,18 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    MaxFileSizeValidator,
-    Param,
-    ParseFilePipe,
-    Post,
-    Query,
-    Req,
-    UploadedFile,
-    UseGuards,
-    UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOperation, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { ImageService } from './image.service';
 import { CreateImageDto, CreateImageMultipartDto, OdataQueryDto, UUIDParamDto } from 'src/common/dto';
@@ -62,6 +48,14 @@ export class ImageController {
                     cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
                 },
             }),
+            fileFilter: (req, file, cb) => {
+                const allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+                if (allowedMimes.includes(file.mimetype)) {
+                    cb(null, true);
+                } else {
+                    cb(new Error('Невірний тип файлу. Дозволені типи: JPEG, PNG, GIF, JPG.'), false);
+                }
+            },
         }),
     ) // Use the diskStorage to save the file temporarily
     @ApiConsumes('multipart/form-data')
