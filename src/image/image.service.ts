@@ -7,6 +7,7 @@ import { FileModel } from 'src/common/sequelize/models/file.model';
 import { ImageModel } from 'src/common/sequelize/models/image.model';
 import { PortfolioModel } from 'src/common/sequelize/models/portfolio.model';
 import { FileService } from 'src/file/file.service';
+import { PortfolioService } from 'src/portfolio/portfolio.service';
 
 @Injectable()
 export class ImageService {
@@ -15,6 +16,8 @@ export class ImageService {
         private readonly imageModel: typeof ImageModel,
         @Inject(FileService)
         private readonly fileService: FileService,
+        @Inject(PortfolioService)
+        private readonly portfolioService: PortfolioService,
     ) {}
 
     async getAllImagesByOdata(query: any): Promise<ImageModel[]> {
@@ -78,10 +81,27 @@ export class ImageService {
     }
 
     async create(file: any | Express.Multer.File, data: CreateImageDto, profileId: string): Promise<ImageModel> {
-        // TODO: file logic
-        // TODO: portfolioId by profileId logic
+        if(!this.portfolioService.isAuthor(profileId, data.portfolioId)) {
+            throw new BadRequestException('You are not allowed to create image for this portfolio');
+        }
         const savedFile: FileModel = await this.fileService.saveFile(file);
-        const newImage = await this.imageModel.create({...data, fileId: savedFile.id});
+        const newImage = await this.imageModel.create({ ...data, fileId: savedFile.id });
         return newImage;
+    }
+
+    async delete(imageId: string, profileId: string): Promise<void> {
+        const image = await this.imageModel.findByPk(imageId, {
+            include: [FileModel, PortfolioModel],
+        });
+        if (!image) {
+            throw new NotFoundException('Image not found');
+        }
+        if (image.portfolio.profileId !== profileId) {
+            throw new BadRequestException('You are not allowed to delete this image');
+        }
+        if (image.fileId) {
+            await this.fileService.deleteFile(image.fileId);
+        }
+        await image.destroy();
     }
 }

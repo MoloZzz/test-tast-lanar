@@ -37,9 +37,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         CommentModule,
         ImageModule,
         ServeStaticModule.forRoot({
-            rootPath: path.join(__dirname, '..', 'static'), 
+            rootPath: path.join(__dirname, '..', 'static'),
             serveRoot: '/static',
-          }),
+        }),
     ],
     controllers: [AppController],
     providers: [],

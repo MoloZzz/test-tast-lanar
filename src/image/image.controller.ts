@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     MaxFileSizeValidator,
     Param,
@@ -50,21 +51,32 @@ export class ImageController {
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Create image' })
     @ApiBearerAuth()
-    @UseInterceptors(FileInterceptor('file', {
-        storage: diskStorage({ 
-            destination: os.tmpdir(),
-            filename: (req, file, cb) => {
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-                const ext = path.extname(file.originalname);
-                file.originalname = Buffer.from(file.originalname, 'latin1').toString();
-                cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-            },
+    @UseInterceptors(
+        FileInterceptor('file', {
+            storage: diskStorage({
+                destination: os.tmpdir(),
+                filename: (req, file, cb) => {
+                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                    const ext = path.extname(file.originalname);
+                    file.originalname = Buffer.from(file.originalname, 'latin1').toString();
+                    cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+                },
+            }),
         }),
-    })) // Use the diskStorage to save the file temporarily
+    ) // Use the diskStorage to save the file temporarily
     @ApiConsumes('multipart/form-data')
-    @ApiBody({type: CreateImageMultipartDto})
+    @ApiBody({ type: CreateImageMultipartDto })
     async createImage(@UploadedFile() file: Express.Multer.File, @Body() data: CreateImageDto, @Req() req: Request) {
         const profile: IProfile = req.user as IProfile;
         return this.imageService.create(file, data, profile.id);
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Delete image by id' })
+    @ApiBearerAuth()
+    async deleteImage(@Param() params: UUIDParamDto, @Req() req: Request) {
+        const profile: IProfile = req.user as IProfile;
+        return this.imageService.delete(params.id, profile.id);
     }
 }

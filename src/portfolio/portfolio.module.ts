@@ -8,5 +8,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
     imports: [SequelizeModule.forFeature([PortfolioModel])],
     providers: [PortfolioService],
     controllers: [PortfolioController],
+    exports: [PortfolioService],
 })
 export class PortfolioModule {}

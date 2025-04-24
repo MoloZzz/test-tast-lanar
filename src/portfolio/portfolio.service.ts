@@ -34,4 +34,21 @@ export class PortfolioService {
         await portfolio.destroy();
         return { message: `Portfolio ${portfolioId} deleted successfully` };
     }
+
+    async isAuthor(profileId: string, portfolioId: string): Promise<boolean> {
+        const portfolio = await this.portfolioModel.findOne({
+            where: {
+                id: portfolioId,
+            },
+        });
+
+        if (!portfolio) {
+            throw new NotFoundException('Portfolio not found');
+        }
+
+        if (portfolio.profileId !== profileId) {
+            return false;
+        }
+        return true;
+    }
 }
